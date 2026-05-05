@@ -1,0 +1,42 @@
+services:
+  youtube-downloader:
+    build: .
+    container_name: youtube-downloader
+    restart: unless-stopped
+    env_file:
+      - .env
+    volumes:
+      # Data volumes
+      # NAS Mount (Unified Downloads and Library)
+      - ${MUSIC_ROOT:-/mnt/smb_music}:/music:rw
+      - ./state:/app/state
+      - ${SONGS_JSON_PATH:-songs.json}:/app/songs.json
+
+    environment:
+      - DOWNLOAD_DIR=/music
+      - LIBRARY_DIR=/music
+      - STATE_DIR=/app/state
+      - SONGS_JSON_PATH=/app/songs.json
+
+      - GENIUS_API_KEY=${GENIUS_API_KEY}
+      - ACOUSTID_API_KEY=${ACOUSTID_API_KEY}
+      - POSTGRES_HOST=postgres
+      - POSTGRES_PORT=5432
+      - POSTGRES_USER=${POSTGRES_USER:-user}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-password}
+      - POSTGRES_DB=${POSTGRES_DB:-youtubedb}
+    depends_on:
+      - postgres
+
+  postgres:
+    image: postgres:15-alpine
+    container_name: youtube-db
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-user}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-password}
+      POSTGRES_DB: ${POSTGRES_DB:-youtubedb}
+    volumes:
+      - ./postgres_data:/var/lib/postgresql/data

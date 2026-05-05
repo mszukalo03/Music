@@ -1,0 +1,18 @@
+{
+  "tracks": [
+    {
+      "artist": "Artist Name",
+      "title": "Song Title",
+      "album": "Album Name (Optional)",
+      "force_youtube": false
+    }
+  ],
+  "albums": [
+    {
+      "artist": "Artist Name",
+      "title": "Album Title",
+      "year": 2024,
+      "force_youtube": false
+    }
+  ]
+}

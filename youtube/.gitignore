@@ -1,0 +1,5 @@
+.env
+songs.josn
+state.json
+/downloads
+/postgres_data
